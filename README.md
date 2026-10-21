@@ -29,7 +29,7 @@ ready‑to‑run native executable. Everything lives at the repository root (the
 | `model/` `fight/` `beat/` | Framework modules used across games. |
 | `tools/` | Recomp tooling: `recomp.py`, `z80.py`, `audit.sh`, `graft.py`, release packaging. |
 | `work/ddsom/` | **Recompiled native source** for ddsom — thousands of generated `native_*.cpp` / `z80_*.cpp` plus analysis logs. This is the actual native translation of the original program; you almost never need to touch it. |
-| `build/ddsom/ddsom.exe` | The prebuilt native Windows executable (~18.5 MB). Just run it. |
+| `build/ddsom/ddsom.exe` | The prebuilt native Windows executable (~18.5 MB). `SDL3.dll` and `zlib1.dll` sit next to it so it runs by double‑click. |
 | `docs/framework-README.md` | The upstream cps2recomp toolkit README (build instructions, toolkit design). |
 | `Makefile`, `CMakeLists.txt`, `build.mk` | Build system for the toolkit. |
 | `LICENSE` | GPL‑3.0 (this project is GPL‑3.0‑only). |
@@ -70,6 +70,11 @@ ddsom/
 Run `build/ddsom/ddsom.exe --rom <path-to-ddsom-folder-or-zip>`. The key is read from the
 same location automatically.
 
+> **To just run it:** the folder `build/ddsom/` already contains `ddsom.exe` plus the
+> required `SDL3.dll` and `zlib1.dll`. Double‑click `ddsom.exe` (or run it from a terminal)
+> and point it at your ROM folder when prompted, or pass `--rom <folder>`. If you move the
+> exe elsewhere, take those two DLLs with it or the game will not start.
+
 ## Controls (summary)
 
 See [`games/ddsom/README.md`](games/ddsom/README.md) for the complete mapping. Defaults:
@@ -79,12 +84,24 @@ everything. The game supports up to 4 players.
 ## Building from source (optional)
 
 You only need this if you want to rebuild the executable. Requires a C++20 toolchain,
-CMake, Ninja and the SDL3 dev libraries.
+CMake, Ninja and the SDL3 dev libraries (SDL3 ≥ 3.4.16, plus ZLIB).
+
+This repo is **flattened** — `games/` and `work/` live at the repository root, not as
+siblings of it. The toolkit's `CMakeLists.txt` defaults to `GAME=vampire_savior` and to a
+sibling layout, so you must pass the game id and the in‑repo paths explicitly (use
+**native** `C:/...` paths — MSYS `/c/...` paths are not understood by the native cmake):
 
 ```bash
-cmake -B build -G Ninja
+# from the repository root, with the UCRT64 toolchain (gcc, cmake, ninja) on PATH
+cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
+  -DGAME=ddsom \
+  -DGAME_DIR="C:/path/to/repo/games/ddsom" \
+  -DWORK_DIR="C:/path/to/repo/work/ddsom"
 cmake --build build --target ddsom
 ```
+
+The compiled `ddsom.exe` lands in `build/`. Copy `SDL3.dll` and `zlib1.dll` from your
+toolchain's `bin/` next to it before running.
 
 Full toolkit build docs: [`docs/framework-README.md`](docs/framework-README.md).
 
