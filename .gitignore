@@ -1,12 +1,21 @@
-# Build output (the recomp is shipped pre-built as ddsom.exe)
-build/
-
-# Extracted ROMs and the CPS-2 master key — user-supplied, never committed
+# Game data — user-supplied, never committed (copyrighted ROM dumps + decryption key)
 rom/
+*.key
+*.zip
 
-# Save states
+# Runtime state files
 state*.bin
+*.state
 
-# OS junk
+# OS / editor junk
 .DS_Store
 Thumbs.db
+__pycache__/
+*.err
+*.out
+
+# Build intermediates are excluded; the prebuilt executable
+# (cps2recomp/build/ddsom/ddsom.exe) is force-added explicitly.
+build/
+
+# work/ (generated recompiled C++) is intentionally tracked.

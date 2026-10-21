@@ -1,0 +1,5 @@
+# cps2recomp input movie: frame player1 player2 player3 player4 (pressed bits, hex)
+300 0800 0000 0000 0000
+303 0000 0000 0000 0000
+323 0400 0000 0000 0000
+326 0000 0000 0000 0000

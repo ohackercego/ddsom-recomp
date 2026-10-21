@@ -1,0 +1,21 @@
+// Generated from game.cfg by cps2recomp/tools/gamecfg.py
+#pragma once
+
+#define GAME_NAME "Dungeons & Dragons: Shadow over Mystara"
+#define GAME_TITLE "Dungeons & Dragons: Shadow over Mystara Recomp"
+#define GAME_ID "ddsom"
+#define GAME_APP_ID "io.github.tmcleroy.dungeonsanddragons"
+#define GAME_DISCLAIMER "Not affiliated with Capcom."
+#define GAME_ROM_SET "ddsom"
+#define GAME_ROM_PARENT "ddsom"
+#define GAME_ROM_NAME "Dungeons & Dragons: Shadow over Mystara (USA 950101)"
+#define GAME_PROGRAM "dd2e.03e:449361af dd2e.04e:5b7052b6 dd2e.05e:788d5f60 dd2e.06e:e0807e1e dd2e.07:bb777a02 dd2e.08:30970890 dd2e.09:99e2194d dd2e.10:e198805e"
+#define GAME_GRAPHICS "dd2.13m:a46b4e6e dd2.15m:d5fc50fc dd2.17m:837c0867 dd2.19m:bb0ec21c dd2.14m:6d824ce2 dd2.16m:79682ae5 dd2.18m:acddd149 dd2.20m:117fb0c0"
+#define GAME_SOUND_PROGRAM "dd2.01:99d657e5 dd2.02:117a3824"
+#define GAME_SAMPLES "dd2.11m:98d0c325 dd2.12m:5ea2e7fa"
+#define GAME_KEY "ddsom.key:541e425d"
+#define GAME_PLAYERS "4"
+#define GAME_BUTTONS "Attack | Jump | Magic"
+#define GAME_CODE_END "0x400000"
+#define GAME_EXPLORE_FEATURES "free_play"
+#define GAME_RELEASE_ALLOWED "150"

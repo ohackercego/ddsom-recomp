@@ -1,0 +1,170 @@
+# Changelog
+
+This game's changes until it moved into CPS-2 Recomp (2026-10-16). From then on they are in the repository's
+[CHANGELOG.md](../../CHANGELOG.md).
+
+The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions stay
+pre-release (`-beta.N`) until every platform's build has been played by hand.
+
+## Unreleased
+
+## 0.1.0-beta.7 - 2026-10-15
+
+- In-game menu: Right on a row that leads to a page goes into that page. The launcher's Features
+  page has a search box (Ctrl+F or Cmd+F; Esc empties it, a second Esc leaves it; with a gamepad, A
+  goes in and B leaves with what was typed kept). (toolkit cps2recomp 0.3.0, recomp-common 0.5.0)
+- Board settings (the launcher's and the menu's Board page): the test menu's operator settings
+  (difficulty, attack power, timer speed, game speed, damage gauges, event, automatic, continue, demo
+  sound, self-censorship), each as the board is set unless chosen; the board's settings memory is not
+  changed. The in-game menu has a Test menu row (the board's test switch, as F2; toolkit cps2recomp#22).
+- Invisible walls (on the Display page, in the launcher's Features and the in-game menu): fights shown in 16:9 but played exactly as on the board, the players stopped where the board's picture
+  ends. Off unless switched on; nothing without widescreen.
+- Display options (the Display page, in the launcher and the in-game menu): Scaling (Sharp, as
+  before; Whole pixels; Smooth), Picture shape (4:3, as before; Square pixels; Fill) and Window size
+  (3x, as before; 2x to 6x). Nothing changes until you choose (toolkit cps2recomp#19).
+
+## 0.1.0-beta.6 - 2026-10-15
+
+- Colour editor: "Save set" keeps the set being edited in the character's library
+  (`palettes/library/<Character>/`, one file a set, named `Lilith 1`, `Lilith 2`...) and "Load"
+  puts a saved one into any set: left and right try each on the character, LP loads it, MK twice
+  deletes it, and moving off the row without loading puts the colours back.
+- Colour editor: Random colours (the Random row: LK, left or right) needs a second press, and HK
+  puts back the colours from before them. Choosing a Line shows the animation that uses it most (Bulleta, Victor,
+  Morrigan, Anakaris, Q-Bee). "Load colour files again" and "Write the game's colours" are on the
+  colour editor's menu page. The README gives the palettes folder for Windows and Linux too.
+- Model viewer: no second shadow on the floor (the hidden second player's came round into the
+  picture when the character walked right); what a stage has in front of the fighters is in front
+  of the character again ("Stage in front", at its own size).
+- Ring out: the fallen fighter's shadow no longer stays on the floor, and the way down to the next
+  stage fades through black instead of the new stage pushing the old one up with a hard edge.
+- `vampire_savior.exe` opened by itself starts the launcher (straight into the game once a ROM set
+  is chosen) instead of closing at once; on Windows no console window opens beside the game, and a
+  start that fails says why in a message box.
+- In-game menu: a long description no longer runs over the hint at the foot of the panel (Display
+  page, Custom colours), a long value no longer runs over its title (Model viewer, Animation), and
+  the panel is opaque.
+- Straight to the title: no longer runs a game fast and unseen for up to a minute and a half after
+  Start (the game's step is 0 for a few frames between its screens too, which it took for the board
+  starting again); only a start or a reset of the board begins the skipping now.
+
+## 0.1.0-beta.5 - 2026-10-14
+
+- Custom colours (Display page; on in Enhanced): the characters in colours of your own, from files
+  in the `palettes` folder beside `settings.ini`. A text file a character (`Morrigan.txt`) changes
+  any of its ten sets, and a copy of the set's `vm3j.10b` edited with PalMod gives every
+  character's colours it changed (their effects' too: poisoned, burned and the like); anything
+  else such a file changes is left as the game's. "Write the game's colours" puts every
+  character's own in `palettes/original` to start from.
+- Colour editor, on the menu's "Alternative modes" page: the model viewer with a panel for
+  changing a character's colours while you watch, 16 levels of red, green and blue, saved to the
+  `palettes` folder as you go. Any of the ten sets and its effects' lines; copy, paste and the
+  game's colour back; Random colours for the whole set; the character standing in its idle or
+  going through any of its animations.
+- Straight to the title (on the Game page): at a start or a reset, everything before the title
+  (the memory test, the version and the warning, the notices, the introduction) is run unseen, and
+  the game shows the title a second or so later.
+- Hidden characters (on the Game page; off in every preset): choosing Gallon gives Dark Gallon,
+  Bishamon gives Oboro Bishamon (the one-player game's last boss, whom no code chooses on this
+  set), and the "?" box gives Shadow, without their codes; for player 1, player 2 or both, and
+  the alternative modes' fighters too. The board's codes work as before, in a rewrite of the
+  routines that read them.
+- Model viewer: Play all, a switch that goes through every one of the character's animations in
+  turn, each shown once (its last frame held for "Repeat after") before the next.
+- Model viewer: an animation is one choice, named by its list and number (A34), where there were
+  two rows; its name is shown for two seconds when it changes (it was never shown: another mode's
+  readout cleared it every frame).
+- Model viewer: a Speed choice (full, 1/2, 1/4, 1/8), a wait of up to ten seconds before an animation
+  starts again, "Reset options" for the page's choices, and left and right stepping through the
+  list's animations while one is showing.
+- Model viewer, on the menu's "Alternative modes" page: one character by itself on a stage or on
+  plain white or black, drawn from a quarter of its size to 25 times, standing (player 1's controls
+  move it) or going through any of its animations (three lists a character; they have numbers, not
+  names).
+- Widescreen (a switch on the launcher's first page, under "Full screen", and on the in-game
+  menu's Display page; off unless switched on, in every preset, because it changes how the game
+  plays): fights are shown and played in 16:9, with more of the stage on each side. The players
+  can go to the wide picture's edges (464 apart at most, where the board allows 336), the camera
+  stops where the wide picture comes to the stage's ends, and the stage's pieces and the things
+  thrown that the game only keeps while they are in the picture are kept while they are in the
+  wide one. The bars stay in the middle. Survival, the endless battle, the ring out and the
+  viewer's infinite stage are wide too. With it off the game is exactly the board's. Known: some
+  pieces of a stage come in late at the wide picture's edge, and at a stage's very ends a few
+  columns of the planes behind are not painted.
+- Endless battle, the stages scrolling by: the next stage is made ready in time for the end of
+  the one shown (in the wide picture a stage is crossed sooner, and at the fast speed the
+  scrolling waited about a second at each stage's end).
+- 55 of the 58 scripts of the stages' pieces are readable C++ too: every one a stage was seen to use, each checked against the game's own
+  on its stage.
+- The stage's code is readable C++ (58 routines: the camera, the scroll screens' placing, the row
+  scroll table, what is in the picture, the players' edges, the stage's pieces), each checked
+  against the game's own on every stage; widescreen is lines in it. With widescreen on, the lady
+  under the bird cage on Feast of the Damned is there whenever she is in the wide picture.
+- Widescreen: a piece of a stage that the game shows only while the camera is one side of a place
+  (most of the people and things in the backgrounds) is shown whenever it is in the wide picture; the
+  lady on Feast of the Damned went while part of her was still in it.
+- Widescreen: no black bands at a stage's ends, or between stages in the viewer's infinite stage and
+  the endless battle's scrolling stages: the wall and the planes behind keep inside their painting
+  (what goes by more slowly than the camera goes by more slowly still), and the building under the
+  helicopter on the Tower of Arrogance is where it belongs.
+- Widescreen: on every stage, the pieces that the game leaves alone until the camera is near them
+  are animated and shown whenever they are near the wide picture, and the three other pieces that
+  are one thing or another by the camera's side (Concrete Cave, Tower of Arrogance, Abaraya) are
+  both there.
+- Widescreen: both groups of dancers on Feast of the Damned are there at once (the board shows one
+  or the other, by which side of a place the camera is).
+
+## 0.1.0-beta.4 - 2026-10-13
+
+- Endless battle: how often the shuffled stage changes (1, 2, 3, 5 or 10 minutes; it was two) and
+  how fast the scrolling stage goes by (slow, medium, fast) are chosen on its page.
+- The launcher can be used with a gamepad alone, or with the arrow keys and Space or Enter: a ring
+  shows what is chosen, A presses it, B goes back, the shoulder buttons change the page. With a
+  gamepad, Choose opens a list of folders and files in the launcher's own window.
+- In the in-game menu Space, Enter and a gamepad's A choose and Backspace and B go back, whatever
+  the game's buttons are set to.
+- Sound can be switched off: a "Muted" switch in the launcher (off unless switched on) and a
+  "Sound" row in the in-game menu.
+- A gamepad's left trigger goes on by a frame only once the game has been stopped (`P`, the right
+  stick's click); it no longer stops the game itself, which a touch of it while playing did, with
+  nothing on the trigger to start it again.
+
+## 0.1.0-beta.3 - 2026-10-13
+
+- Three more modes under "Alternative modes". Survival: one opponent after another on the health
+  you have left, with the count at the end. Endless battle: two fighters the game plays, with no
+  panel, the loser replaced; either can be taken over from the controls; on one stage, on stages
+  that fade into one another, or on a floor that scrolls through them. Ring out: no health, a
+  stage's ends are open, and the winner jumps down to the next stage.
+
+## 0.1.0-beta.2 - 2026-10-13
+
+- "Alternative modes" at the top of the in-game menu: Training mode and two new modes, each with
+  a page of its own. Training's page has Start, Start over, its aids and the dummy's page, which
+  were on the first page and on pages of their own.
+- Attract mode: the game's own show on a loop with no coin in, with free play on too. All of it,
+  the introduction only, or the demonstration fights only.
+- Stage viewer: any stage with nobody on it and no panel; scrolled with the stick or by itself
+  (slow, medium, fast); the stage's own tune or any other stage's.
+- The viewer's "Infinite" stage: every stage in turn, each scrolling into the next, the tunes
+  fading from one to the other.
+- More pictures of the game in the README.
+
+## 0.1.0-beta.1 - 2026-10-12
+
+- Vampire Savior (set `vsavj`) boots and plays from the player's own ROM set: attract mode, the
+  one-player ladder to the ending, two-player games, the operator's test menu.
+- Launcher: the ROM set (checked, only read), features (Pure / Enhanced / Custom), controllers
+  with keys and buttons that can be chosen for each player.
+- In-game menu: save states, speed, coin, reset, pages of features.
+- Free play (on in Enhanced), cheats, pause, frame step, slow motion.
+- Training mode: direct entry, stage choice, start over, hit boxes, input display, combo readout,
+  frame data and a frame meter, a dummy that guards, records and replays.
+- Project files for a public repository: notices, contributing rules, the audit (`make audit`),
+  CI on macOS, Linux and Windows, release scripts and the release process (`docs/RELEASING.md`).
+- Release downloads hold the translated program, as a build from source does; they are built on a
+  machine with the ROM set, never by CI.
+- `make check-release`: the build with no translated code (the interpreters, what CI builds) checked
+  against the translated build.
+- The app and its window are called "Vampire Savior Recomp". Pictures of the game in the README.
+- GPL-3.0-only, with a licence line on every source file.

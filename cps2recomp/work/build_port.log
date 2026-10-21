@@ -1,0 +1,6 @@
+recomp: 4463 entries -> 161831 instructions (644614 bytes) in 41332 blocks, 11474 routines, 111 files; 97 left to the interpreter (63 of them not instructions: data a guess took for code)
+        of those, 92844 instructions from 1989 guessed entries
+recompz80: 333 entries -> 4489 instructions (8112 bytes) in 843 blocks, 61 routines; 0 left to the interpreter
+ninja: Entering directory `build/ddsom'
+[0/2] Re-checking globbed directories...
+[1/158] Generating CXX dyndep file CMakeFiles/ddsom.dir/CXX.dd

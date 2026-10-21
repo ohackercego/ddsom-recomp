@@ -1,0 +1,51 @@
+[0/2] Re-checking globbed directories...
+[1/159] Scanning C:/Users/azure/Downloads/cps2/cps2recomp/port/frontend_sdl.cpp for CXX dependencies
+[2/159] Generating CXX dyndep file CMakeFiles/ddsom.dir/CXX.dd
+[3/5] Building CXX object CMakeFiles/ddsom.dir/port/frontend_sdl.cpp.obj
+C:/Users/azure/Downloads/cps2/cps2recomp/port/frontend_sdl.cpp: In function 'const port::BoundTable& port::{anonymous}::Table()':
+C:/Users/azure/Downloads/cps2/cps2recomp/port/frontend_sdl.cpp:29:34: warning: possibly dangling reference to a temporary [-Wdangling-reference]
+   29 |         static const BoundTable &table = MakeBoundTable(GamePlayers(), GameButtons(), InCollection());
+      |                                  ^~~~~
+C:/Users/azure/Downloads/cps2/cps2recomp/port/frontend_sdl.cpp:29:83: note: 'const std::string' {aka 'const std::__cxx11::basic_string<char>'} temporary created here
+   29 |         static const BoundTable &table = MakeBoundTable(GamePlayers(), GameButtons(), InCollection());
+      |                                                                        ~~~~~~~~~~~^~
+C:/Users/azure/Downloads/cps2/cps2recomp/port/frontend_sdl.cpp: In function 'int port::RunWindowed(Port&)':
+C:/Users/azure/Downloads/cps2/cps2recomp/port/frontend_sdl.cpp:301:69: warning: enumerated and non-enumerated type in conditional expression [-Wextra]
+  301 |             menuNow |= (previousPad & kUp) || keys[SDL_SCANCODE_UP] ? recomp::kMenuUp : 0;
+      |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
+C:/Users/azure/Downloads/cps2/cps2recomp/port/frontend_sdl.cpp:302:73: warning: enumerated and non-enumerated type in conditional expression [-Wextra]
+  302 |             menuNow |= (previousPad & kDown) || keys[SDL_SCANCODE_DOWN] ? recomp::kMenuDown : 0;
+      |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+C:/Users/azure/Downloads/cps2/cps2recomp/port/frontend_sdl.cpp:303:73: warning: enumerated and non-enumerated type in conditional expression [-Wextra]
+  303 |             menuNow |= (previousPad & kLeft) || keys[SDL_SCANCODE_LEFT] ? recomp::kMenuLeft : 0;
+      |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+C:/Users/azure/Downloads/cps2/cps2recomp/port/frontend_sdl.cpp:304:75: warning: enumerated and non-enumerated type in conditional expression [-Wextra]
+  304 |             menuNow |= (previousPad & kRight) || keys[SDL_SCANCODE_RIGHT] ? recomp::kMenuRight : 0;
+      |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+C:/Users/azure/Downloads/cps2/cps2recomp/port/frontend_sdl.cpp:305:119: warning: enumerated and non-enumerated type in conditional expression [-Wextra]
+  305 |             menuNow |= keys[SDL_SCANCODE_SPACE] || (keys[SDL_SCANCODE_RETURN] && !(SDL_GetModState() & SDL_KMOD_ALT)) ? recomp::kMenuConfirm : 0;
+      |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+C:/Users/azure/Downloads/cps2/cps2recomp/port/frontend_sdl.cpp:306:53: warning: enumerated and non-enumerated type in conditional expression [-Wextra]
+  306 |             menuNow |= keys[SDL_SCANCODE_BACKSPACE] ? recomp::kMenuBack : 0;
+      |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+C:/Users/azure/Downloads/cps2/cps2recomp/port/frontend_sdl.cpp:308:81: warning: enumerated and non-enumerated type in conditional expression [-Wextra]
+  308 |                 menuNow |= SDL_GetGamepadButton(gp, SDL_GAMEPAD_BUTTON_DPAD_UP) ? recomp::kMenuUp : 0;
+      |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
+C:/Users/azure/Downloads/cps2/cps2recomp/port/frontend_sdl.cpp:309:83: warning: enumerated and non-enumerated type in conditional expression [-Wextra]
+  309 |                 menuNow |= SDL_GetGamepadButton(gp, SDL_GAMEPAD_BUTTON_DPAD_DOWN) ? recomp::kMenuDown : 0;
+      |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+C:/Users/azure/Downloads/cps2/cps2recomp/port/frontend_sdl.cpp:310:83: warning: enumerated and non-enumerated type in conditional expression [-Wextra]
+  310 |                 menuNow |= SDL_GetGamepadButton(gp, SDL_GAMEPAD_BUTTON_DPAD_LEFT) ? recomp::kMenuLeft : 0;
+      |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+C:/Users/azure/Downloads/cps2/cps2recomp/port/frontend_sdl.cpp:311:84: warning: enumerated and non-enumerated type in conditional expression [-Wextra]
+  311 |                 menuNow |= SDL_GetGamepadButton(gp, SDL_GAMEPAD_BUTTON_DPAD_RIGHT) ? recomp::kMenuRight : 0;
+      |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+C:/Users/azure/Downloads/cps2/cps2recomp/port/frontend_sdl.cpp:312:79: warning: enumerated and non-enumerated type in conditional expression [-Wextra]
+  312 |                 menuNow |= SDL_GetGamepadButton(gp, SDL_GAMEPAD_BUTTON_SOUTH) ? recomp::kMenuConfirm : 0;
+      |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+C:/Users/azure/Downloads/cps2/cps2recomp/port/frontend_sdl.cpp:313:78: warning: enumerated and non-enumerated type in conditional expression [-Wextra]
+  313 |                 menuNow |= SDL_GetGamepadButton(gp, SDL_GAMEPAD_BUTTON_EAST) ? recomp::kMenuBack : 0;
+      |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+At global scope:
+cc1plus.exe: note: unrecognized command-line option '-Wno-parentheses-equality' may have been intended to silence earlier diagnostics
+[4/5] Linking CXX executable ddsom.exe

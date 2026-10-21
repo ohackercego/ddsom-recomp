@@ -1,178 +1,134 @@
-# Dungeons & Dragons: Shadow over Mystara — Recomp (native PC port)
+# Dungeons & Dragons: Shadow over Mystara — Native PC Recompilation
 
-A **100% native PC port** of *Dungeons & Dragons: Shadow over Mystara* (Capcom, 1996,
-CPS‑2 arcade), produced by **static recompilation** of the original 68000 + Z80 arcade
-machine code into x86‑64 native code. There is **no emulator** in this build: the game's
-own program ROM is translated ahead‑of‑time into native functions that the launcher calls
-directly, and the original Z80 sound program is recompiled the same way. What you run is a
-normal Windows executable (`ddsom.exe`) that talks to your GPU and audio through SDL3.
+This repository publishes a **100% native PC port** of *Dungeons & Dragons: Shadow over Mystara*
+(Arcade, Capcom CPS‑2, 1996), produced by **static recompilation** of the original 68000 + Z80
+machine code into native x86‑64 C++. There is **no emulator** and **no interpreter** in the normal
+play path: the game's original CPU code has been translated ahead‑of‑time into native functions that
+the port calls directly. It runs on SDL3 (window, input, audio) and renders the CPS‑2 video/QRAM
+and QSound hardware through a native backend.
 
-> Not affiliated with or endorsed by Capcom.
-
-This repository contains **only the Dungeons & Dragons: Shadow over Mystara recomp** —
-not the rest of the cps2recomp toolkit or the other games it supports.
-
----
-
-## What "recomp" means here (and why there is no emulation)
-
-- **Native recompilation, not emulation.** The CPS‑2 68000 CPU ROM and the Z80 sound ROM
-  are translated into native C++ (`native_*.cpp` / `z80_*.cpp`) by the cps2recomp toolkit
-  *before* you ever run the game. At runtime the launcher jumps straight into that translated
-  code — no 68000 interpreter, no Z80 interpreter, no cycle‑accurate bus. (The translator also
-  keeps a fallback interpreter for any instruction it could not prove, but for this game the
-  translated coverage is complete, so the interpreter is never reached in normal play.)
-- **Native PC port.** Rendering, input, audio and windowing are handled by a small SDL3
-  launcher, not by an arcade‑board simulation. You get a window, a keyboard/gamepad, and sound
-  — like any other native game.
+The full toolkit it is built from — **cps2recomp** — lives in the [`cps2recomp/`](cps2recomp)
+subdirectory of this repo, so you also get the complete source, the recompilation toolchain, every
+game configuration, and the prebuilt executable.
 
 ---
 
-## Files in this repository
+## ⚠️ What is NOT included (and why)
 
-| File / folder | Purpose |
-|---|---|
-| `ddsom.exe` | The native Windows executable — the actual recompiled game. **Run this.** |
-| `games/ddsom/game.cfg` | Per‑game config: ROM set name, the exact 22 ROM filenames + CRC32s, the CPS‑2 master key filename, player count (4) and button names (Attack / Jump / Magic). Read by the launcher at startup. |
-| `games/ddsom/README.md` | Game‑specific notes: how the recomp was produced, build status, known limits. |
-| `games/ddsom/src/` | The Dungeons & Dragons‑specific recomp source — the hand‑written routines and board mapping for this title (the parts the auto‑translator could not derive automatically). |
-| `games/ddsom/PROGRESS.md` | Build / translation progress and how the native code was verified. |
-| `games/ddsom/tests/` | A small test that checks the control bindings are consistent. |
-| `games/ddsom/check_bindings.sh`, `check_rewrites.sh` | Developer helpers (verify bindings / verify rewritten routines). |
-| `games/ddsom/family.h`, `Makefile` | Game‑family definition and the per‑game make stub used by the toolkit. |
-| `LICENSE` | GPL‑3.0 (the project this recomp is derived from is GPL‑3.0). |
-| `.gitignore` | Keeps build output, extracted ROMs and save states out of the repo. |
+- **No ROM.** You must supply the original arcade ROM dump yourself. It is copyrighted Capcom
+  material and is intentionally **not** distributed here.
+- **No encryption key (`ddsom.key`).** The CPS‑2 set is encrypted; the 20‑byte master key that
+  decrypts it is **not** included and **cannot be derived**. You must provide it.
+- For the legal/technical background, see [`cps2recomp/games/ddsom/README.md`](cps2recomp/games/ddsom/README.md).
 
-> **No ROM image and no encryption key are included here** (see *The encryption key* below).
-> You supply those yourself.
+### Do you really need the key?
+**Yes — both at build time and at runtime.** The recompiler reads the encrypted ROM to statically
+translate it, and the running executable re‑decrypts the data tables at load. Without a valid
+`ddsom.key` the build fails and the game refuses to start. There is no "key‑free" mode.
 
----
-
-## The encryption key — yes, you need it
-
-CPS‑2 arcade boards store their program ROMs **encrypted**. To turn the original board dumps
-into something the recomp can run, the CPS‑2 master key for this title is used to decrypt them.
-Concretely:
-
-- **The file is `ddsom.key`** — a 20‑byte CPS‑2 master key (region `key`). It is referenced in
-  `games/ddsom/game.cfg` as `key = ddsom.key:541e425d`.
-- **It is required at runtime.** The launcher loads the ROM set *and* `ddsom.key` from the same
-  place; if the key file is missing it stops with an error. This is not optional for the standard,
-  encrypted ROM set.
-- **It is NOT in this repository.** The key is arcade‑board data we do not distribute. You must
-  obtain `ddsom.key` yourself and drop it next to the ROM files.
-- **Which versions need it?** The recomp is built from the **USA release, revision 950101**
-  (`ddsom`). That set is CPS‑2‑encrypted, so it needs `ddsom.key`. Other regional sets (whose
-  words differ, nothing else) need their own equivalent key. A *pre‑decrypted* ROM set would not
-  need the key — but the launcher expects the standard encrypted set plus `ddsom.key`, so use that.
+### Exactly which ROM?
+The set **`ddsom`, USA region, revision `950101`** (22 files) **plus your `ddsom.key`**. The full
+file list and CRC32s are in [`cps2recomp/games/ddsom/game.cfg`](cps2recomp/games/ddsom/game.cfg).
+Place all 22 ROM files and `ddsom.key` together in a folder (e.g. `rom/ddsom/`) and point the
+executable at it with `--rom rom/ddsom`.
 
 ---
 
-## The exact ROM you need
+## Quick start (using the prebuilt executable)
 
-- **ROM set name:** `ddsom`
-- **Title:** *Dungeons & Dragons: Shadow over Mystara (USA 950101)*
-- **22 ROM files** (filenames and their CRC32, verified against MAME's `src/mame/capcom/cps2.cpp`):
+1. Download [`cps2recomp/build/ddsom/ddsom.exe`](cps2recomp/build/ddsom/ddsom.exe).
+2. Obtain the `ddsom` (USA 950101) ROM set and a `ddsom.key`, and put them in one folder.
+3. Run:
+   ```
+   ddsom.exe --rom <path-to-folder-with-22-roms-and-ddsom.key>
+   ```
+4. Controls — 4 players, each with **Attack**, **Jump**, **Magic**:
 
-```
-Program (68000), 8 files:
-  dd2e.03e  dd2e.04e  dd2e.05e  dd2e.06e
-  dd2e.07   dd2e.08   dd2e.09   dd2e.10
+   | Action | P1 (keyboard) | P2 | P3 | P4 |
+   |--------|---------------|----|----|----|
+   | Up/Down/Left/Right | Arrow keys | `6`/`4`/`3`/`5` | Numpad `8`/`2`/`4`/`6` | `T`/`G`/`F`/`H` |
+   | Attack | `Z` (A) / `X` (B) / `C` (C) | `Z`/`X`/`C` | `O`/`P`/`;` | `V`/`B`/`N` |
+   | Start | `Enter` | `1` | Numpad `0` | `7` |
+   | Jump / Magic | `LShift` / `LAlt` | `LShift`/`LAlt` | `LShift`/`LAlt` | `LShift`/`LAlt` |
 
-Graphics (4 planes per row), 8 files:
-  dd2.13m  dd2.15m  dd2.17m  dd2.19m
-  dd2.14m  dd2.16m  dd2.18m  dd2.20m
-
-Sound program (Z80), 2 files:
-  dd2.01   dd2.02
-
-QSound samples, 2 files:
-  dd2.11m  dd2.12m
-
-Key (supplied by you, NOT in the zip), 1 file:
-  ddsom.key
-```
-
-Get these from a MAME / `ddsom.zip` collection that matches the USA 950101 set, then verify the
-filenames and CRC32s against the list above.
+   Gamepads are auto‑detected (West = magic, South = attack, East = jump, etc.). A full control
+   reference is in the ddsom README linked below.
 
 ---
 
-## Where to put the ROM and key
+## Repository layout
 
-Put all 22 ROM files **and** `ddsom.key` together in a folder named `rom/ddsom/` next to
-`ddsom.exe`:
+The whole **cps2recomp** project is nested under `cps2recomp/`. Top‑level files here are only the
+wrapper `README.md`, `LICENSE`, and `.gitignore`.
 
 ```
 ddsom-recomp/
-├── ddsom.exe
-├── rom/
-│   └── ddsom/
-│       ├── dd2e.03e  …  dd2.20m     (the 22 ROM files)
-│       └── ddsom.key              (the CPS-2 master key, you supply)
-└── games/ddsom/game.cfg
+├── README.md            ← this file (overview + how to run)
+├── LICENSE              ← GPL‑3.0 (copied from the toolkit)
+├── .gitignore           ← ignores ROM dumps, keys, runtime state, OS junk
+└── cps2recomp/          ← the full cps2recomp toolkit (source + tools + exe)
+    ├── README.md        ← upstream toolkit documentation (how the recompiler works)
+    ├── LICENSE
+    ├── Makefile, build.mk, CMakeLists.txt   ← build system
+    ├── port/            ← SDL3 native port: window, input, audio, platform layer
+    ├── machine/         ← CPS‑2 hardware model: memory map, devices, ROM loading
+    ├── runtime/         ← recomp runtime: calls translated functions, handles hooks
+    ├── recomp-common/   ← shared recompiler core (ELF/binary parsing, translation engine)
+    │   └── launcher/    ← recomp bootstrap / entry point
+    ├── video/           ← CPS‑2 video/QRAM rendering backend
+    ├── sound/           ← QSound audio synthesis backend
+    ├── tools/           ← recompilation toolchain (parser, recompiler, analyzer) + audit.sh
+    ├── games/           ← per‑game integration: config + game‑specific C++ + tests
+    │   └── ddsom/       ← Dungeons & Dragons: Shadow over Mystara
+    │       ├── README.md   ← full ddsom docs: key, exact ROM, controls, FAQ
+    │       ├── game.cfg     ← ROM file list, CRC32s, memory map, input mapping
+    │       ├── src/         ← game‑specific hooks/overrides
+    │       ├── tests/       ← binding/control tests
+    │       └── movies/      ← attract‑mode script text
+    ├── beat/  fight/  model/  example/   ← shared game‑type helper frameworks
+    ├── third_party/     ← vendored dependencies
+    ├── docs/  .github/  ← documentation and CI workflows
+    ├── work/            ← GENERATED recompiled C++ (the 68000/Z80 translated to native)
+    └── build/
+        └── ddsom/
+            └── ddsom.exe  ← the prebuilt native executable (the only build artifact kept)
 ```
 
-Or point the launcher at the folder / zip explicitly:
-
-```
-ddsom.exe --rom <path-to-folder-or-zip-containing-the-22-files-and-ddsom.key>
-```
-
-The launcher reads the 22 ROM files and `ddsom.key` from that same place.
+### What each piece is for
+- **`port/`** — the part that makes it a real PC program: creates the window, reads keyboard/gamepad,
+  plays audio through SDL3, and drives the game loop. This is the "native port" layer.
+- **`machine/`** — replaces the CPS‑2 circuit board in software: defines how the 68000/Z80 address
+  space is laid out, maps the ROM, and loads it (requiring `ddsom.key` to decrypt).
+- **`runtime/` + `recomp-common/`** — the recompilation engine. `recomp-common` parses the original
+  binary and emits native C++; `runtime` wires the translated functions together and patches hooks.
+- **`video/` + `sound/`** — native implementations of the CPS‑2 graphics (sprites, QRAM) and QSound
+  DSP, so the original game code drives real PC rendering/audio instead of an emulator.
+- **`tools/`** — the offline toolchain that actually performs the static recompilation
+  (`make GAME=ddsom explore` regenerates `work/`).
+- **`games/ddsom/`** — everything specific to this title: which ROM files, how buttons map, the
+  control tests, and the gameplay hooks in `src/`.
+- **`work/`** — the output of that toolchain: the 68000 and Z80 code translated into native C++
+  source. It is included so the repository is self‑contained, but it is regenerated from the ROM.
+- **`build/ddsom/ddsom.exe`** — the compiled result you actually run.
 
 ---
 
-## Controls
+## Building from source
 
-**Four players.** Each player has **Attack**, **Jump** and **Magic** (the launcher shows them as
-*Attack | Jump | Magic*) plus **Coin** and **Start**.
+Prerequisites: a C++20 compiler, CMake, Make, Python 3, and the SDL3 / OpenGL / Vulkan dev libraries.
 
-**Keyboard** — one keyboard is enough for all four; each player has its own block of keys:
+```bash
+cd cps2recomp
+make GAME=ddsom explore      # regenerates work/ from the ROM + key
+make GAME=ddsom              # builds build/ddsom/ddsom.exe
+```
 
-| Action | P1 | P2 | P3 | P4 |
-|---|---|---|---|---|
-| Up    | Arrow Up | 6 | Numpad 8 | T |
-| Down  | Arrow Down | 4 | Numpad 2 | G |
-| Left  | Arrow Left | 3 | Numpad 4 | F |
-| Right | Arrow Right | 5 | Numpad 6 | H |
-| Attack | A | Z | O | V |
-| Jump   | S | X | P | B |
-| Magic  | D | C | ; (semicolon) | N |
-| Start  | Enter* | 2 | 8 | 0 |
-| Coin   | Left Shift* | 1 | 7 | 9 |
-
-\* P1 uses **Enter** for Start and **Left Shift** for Coin so the number row stays free for the
-other players.
-
-**Gamepad** — the first gamepad is P1, the second P2, and so on. Laid out like a six‑button panel:
-- Buttons Attack / Jump / Magic → **West / South / East** (then North, Right Shoulder, Right Trigger).
-- **Start** → Start button. **Coin** → Back button.
-- The left stick (or d‑pad) is always the directions.
-
-You can rebind everything in the launcher's **Controllers** page; your choices are saved to
-`settings.ini`.
-
----
-
-## How to play
-
-1. Get the `ddsom` (USA 950101) ROM set (22 files) and `ddsom.key`.
-2. Place them in `rom/ddsom/` (or pass `--rom <folder>`).
-3. Run `ddsom.exe`.
-4. Insert coins (per‑player Coin key / Back on gamepad), press Start, and play.
-
----
-
-## Building from source (optional)
-
-This repository ships the **finished native executable**, so you do not need to build to play.
-If you want to rebuild or modify the recomp, it is produced by the
-[cps2recomp](https://github.com/tmcleroy/cps2recomp) toolkit: that project provides the
-runtime / launcher and the translator; this folder's `games/ddsom/` is the per‑game input to it.
+See [`cps2recomp/README.md`](cps2recomp/README.md) and
+[`cps2recomp/games/ddsom/README.md`](cps2recomp/games/ddsom/README.md) for the full, detailed
+documentation (proof of native execution, key/ROM specifics, four‑player controls, and FAQ).
 
 ---
 
 ## License
 
-GPL‑3.0. See `LICENSE`.
+GPL‑3.0. See [`LICENSE`](LICENSE) and [`cps2recomp/THIRD_PARTY_NOTICES.md`](cps2recomp/THIRD_PARTY_NOTICES.md).

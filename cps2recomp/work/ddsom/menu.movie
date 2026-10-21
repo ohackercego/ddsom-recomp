@@ -1,0 +1,42 @@
+# cps2recomp input movie: frame player1 player2 (pressed bits, hex)
+# An input movie to drive the D&D operator menu (the test switch is held, so the game's own
+# menu shows): down to CONFIGURATION, into it, down to SYSTEM, into it, down to CHUTE TYPE,
+# right (to change it to four players), and out with EXIT.
+#
+# The bits of a player's controls (machine/machine.h):
+#   right 0x001  left 0x002  down 0x004  up 0x008
+#   punch1 0x010  punch2 0x020  punch3 0x040
+#   kick1 0x080   kick2 0x100   kick3 0x200
+#   start 0x400   coin 0x800
+#
+# The game's menu takes the directions and the first button (the "SELECT" of its own wording).
+1000 0004
+1060 0000
+1120 0004
+1180 0000
+1240 0004
+1300 0000
+1360 0004
+1420 0000
+1480 0004
+1540 0000
+1600 0004
+1660 0000
+1720 0004
+1780 0000
+1840 0004
+1900 0000
+1960 0010
+2020 0000
+2080 0004
+2140 0000
+2200 0010
+2260 0000
+2320 0004
+2380 0000
+2440 0010
+2500 0000
+2560 0004
+2620 0000
+2680 0010
+2740 0000
