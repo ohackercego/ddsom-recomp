@@ -29,7 +29,7 @@ ready‑to‑run native executable. Everything lives at the repository root (the
 | `model/` `fight/` `beat/` | Framework modules used across games. |
 | `tools/` | Recomp tooling: `recomp.py`, `z80.py`, `audit.sh`, `graft.py`, release packaging. |
 | `work/ddsom/` | **Recompiled native source** for ddsom — thousands of generated `native_*.cpp` / `z80_*.cpp` plus analysis logs. This is the actual native translation of the original program; you almost never need to touch it. |
-| `build/ddsom/ddsom.exe` | The prebuilt native Windows executable (~18.5 MB). `SDL3.dll` and `zlib1.dll` sit next to it so it runs by double‑click. |
+| `build/ddsom/ddsom.exe` | The prebuilt native Windows executable (~21 MB, statically linked C++ runtime). `SDL3.dll`, `zlib1.dll` and `libiconv-2.dll` sit next to it so it runs by double‑click. |
 | `docs/framework-README.md` | The upstream cps2recomp toolkit README (build instructions, toolkit design). |
 | `Makefile`, `CMakeLists.txt`, `build.mk` | Build system for the toolkit. |
 | `LICENSE` | GPL‑3.0 (this project is GPL‑3.0‑only). |
@@ -71,9 +71,10 @@ Run `build/ddsom/ddsom.exe --rom <path-to-ddsom-folder-or-zip>`. The key is read
 same location automatically.
 
 > **To just run it:** the folder `build/ddsom/` already contains `ddsom.exe` plus the
-> required `SDL3.dll` and `zlib1.dll`. Double‑click `ddsom.exe` (or run it from a terminal)
+> required `SDL3.dll`, `zlib1.dll` and `libiconv-2.dll`. Double‑click `ddsom.exe` (or run it from a terminal)
 > and point it at your ROM folder when prompted, or pass `--rom <folder>`. If you move the
-> exe elsewhere, take those two DLLs with it or the game will not start.
+> exe elsewhere, take those three DLLs with it or the game will not start. There is also a
+> `Jogar.bat` in the repository root that launches the game with the bundled ROM folder.
 
 ## Controls (summary)
 
@@ -100,8 +101,9 @@ cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
 cmake --build build --target ddsom
 ```
 
-The compiled `ddsom.exe` lands in `build/`. Copy `SDL3.dll` and `zlib1.dll` from your
-toolchain's `bin/` next to it before running.
+The compiled `ddsom.exe` lands in `build/`. Copy `SDL3.dll`, `zlib1.dll` and `libiconv-2.dll` from your
+toolchain's `bin/` next to it before running. (The shipped `build/ddsom/ddsom.exe` is already statically
+linked against libgcc/libstdc++, so it needs only those three DLLs.)
 
 Full toolkit build docs: [`docs/framework-README.md`](docs/framework-README.md).
 
