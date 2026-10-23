@@ -78,9 +78,18 @@ same location automatically.
 
 ## Controls (summary)
 
-See [`games/ddsom/README.md`](games/ddsom/README.md) for the complete mapping. Defaults:
-move with the stick, act/use with the action buttons, and the launcher menu lets you remap
-everything. The game supports up to 4 players.
+Four players, each on their own keys or gamepad — no key is shared between two players. The panel has six
+buttons; this game uses four of them (Attack, Jump, Magic and Select — Select changes character and item).
+
+| Player | Move | Attack | Jump | Magic | Select | Start | Coin |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | Arrow keys | `S` | `A` | `D` | `Z` | `Enter` | `Left Shift` |
+| 2 | Numpad `8` `2` `4` `6` | `I` | `O` | `P` | `K` | `2` | `3` |
+| 3 | `T` `G` `F` `H` (up/down/left/right) | `V` | `B` | `N` | `M` | Numpad `Enter` | Numpad `+` |
+| 4 | `8` `4` `6` `9` (up/down/left/right) | `Q` | `W` | `E` | `R` | `7` | `0` |
+
+See [`games/ddsom/README.md`](games/ddsom/README.md) for the complete mapping, including the gamepad
+bindings. The launcher menu lets you remap everything, per player.
 
 ## Building from source (optional)
 
@@ -104,6 +113,16 @@ cmake --build build --target ddsom
 The compiled `ddsom.exe` lands in `build/`. Copy `SDL3.dll`, `zlib1.dll` and `libiconv-2.dll` from your
 toolchain's `bin/` next to it before running. (The shipped `build/ddsom/ddsom.exe` is already statically
 linked against libgcc/libstdc++, so it needs only those three DLLs.)
+
+> **If you edit `games/ddsom/game.cfg`** (the players, the button names), regenerate the header CMake reads
+> before building, or the executable is built against the previous values:
+>
+> ```bash
+> python3 tools/gamecfg.py --header work/ddsom/gen/game_info.h ddsom
+> ```
+>
+> `work/ddsom/gen/game_info.h` is generated, but it is kept in the repository. `make` regenerates it for you
+> (`build.mk`: `port: gen configure`); the CMake build above only includes the directory, so it does not.
 
 Full toolkit build docs: [`docs/framework-README.md`](docs/framework-README.md).
 

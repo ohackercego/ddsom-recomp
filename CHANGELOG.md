@@ -23,6 +23,14 @@
   - Verified headless: the game's per-frame state hash differs for each of the 24 button/player pairs, each player's
     presses change the state independently of the others', and a four-player run diverges from a two-player one from
     the fourth frame on. The shipped `build/ddsom/ddsom.exe` is rebuilt with it.
+  - **The generated header follows the config** (`work/ddsom/gen/game_info.h`): `GAME_BUTTONS` was still the old
+    three, because that file is written by `tools/gamecfg.py` and the CMake build only reads it — unlike `make`,
+    whose `gen` target regenerates it (`build.mk`: `port: gen configure`). Anyone building with CMake after
+    editing `game.cfg` should run `python3 tools/gamecfg.py --header work/ddsom/gen/game_info.h ddsom` first, or
+    the executable is built against the previous button names. The READMEs say so.
+  - **The controls are documented** (`README.md`, `games/ddsom/README.md`): both still described the old layout,
+    which had player 2 on `Z X C` — player 1's own keys — and no Select. They now give the four players' full
+    mapping and say which of the panel's six buttons the game uses.
 
 A tenth game, Super Gem Fighter Mini Mix (*Pocket Fighter* in Japan), with everything the other fighting games have:
 a full training mode, attract mode, the stage and model viewers, survival, endless battle, ring out, widescreen, custom

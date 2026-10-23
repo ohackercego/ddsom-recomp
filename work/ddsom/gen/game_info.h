@@ -15,7 +15,7 @@
 #define GAME_SAMPLES "dd2.11m:98d0c325 dd2.12m:5ea2e7fa"
 #define GAME_KEY "ddsom.key:541e425d"
 #define GAME_PLAYERS "4"
-#define GAME_BUTTONS "Attack | Jump | Magic"
+#define GAME_BUTTONS "Attack | Jump | Magic | Select | Item | Special"
 #define GAME_CODE_END "0x400000"
 #define GAME_EXPLORE_FEATURES "free_play"
 #define GAME_RELEASE_ALLOWED "150"

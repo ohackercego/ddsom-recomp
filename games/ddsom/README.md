@@ -32,8 +32,9 @@ every block is translated and runs natively.
   takes up to four; the Board page's **Players** setting lets them join — four sharing one coin chute, or each with a
   chute of their own.
 - Plays with a keyboard, a gamepad or an arcade stick; every key and button can be changed, for each player, in the
-  launcher, where the buttons are called what the game calls them: **Attack**, **Jump** and **Magic**. On a gamepad
-  they start on West (X), South (A) and East (B), as the collection's other games have their first three buttons.
+  launcher, where the buttons are called what the game calls them: **Attack**, **Jump**, **Magic** and **Select**. On a
+  gamepad they start on West (X), South (A), East (B) and North (Y), as the collection's other games have their first
+  four buttons.
 - An in-game menu (Esc or `F1`; on a gamepad, the left stick's click or Start and Select together) with save states,
   speed, pause and frame advance, the cheats and every feature.
 - **Pure** plays exactly as the board does. **Enhanced** (the default) adds free play and the extra players. Every
@@ -112,18 +113,26 @@ ever read, never written. (You can also point the build elsewhere with `make GAM
 
 ### Controls
 
-Four players, each on their own keys or gamepad. The defaults (all changeable per player on the launcher's Controllers
-page):
+Four players, each on their own keys or gamepad — no key is shared between two players. The defaults (all
+changeable per player on the launcher's Controllers page):
 
-| Player | Move | Attack | Jump | Magic | Start | Coin |
-| --- | --- | --- | --- | --- | --- | --- |
-| 1 | Arrow keys | `A` | `S` | `D` | `Enter` | `Left Shift` |
-| 2 | `6` `4` `3` `5` (up/down/left/right) | `Z` | `X` | `C` | `2` | `1` |
-| 3 | Numpad `8` `2` `4` `6` | `O` | `P` | `;` | `8` | `7` |
-| 4 | `T` `G` `F` `H` (up/down/left/right) | `V` | `B` | `N` | `0` | `9` |
+| Player | Move | Attack | Jump | Magic | Select | Start | Coin |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | Arrow keys | `S` | `A` | `D` | `Z` | `Enter` | `Left Shift` |
+| 2 | Numpad `8` `2` `4` `6` | `I` | `O` | `P` | `K` | `2` | `3` |
+| 3 | `T` `G` `F` `H` (up/down/left/right) | `V` | `B` | `N` | `M` | Numpad `Enter` | Numpad `+` |
+| 4 | `8` `4` `6` `9` (up/down/left/right) | `Q` | `W` | `E` | `R` | `7` | `0` |
+
+The panel has six buttons; this game uses four of them. **Attack**, **Jump**, **Magic** and **Select** are the
+four — Select is the one that changes character and item. The remaining two slots (`X` `C` for player 1,
+`L` `;` for player 2, `,` `.` for player 3, `Y` `U` for player 4) are spare and unbound by the game.
+
+Player 1 keeps the arrow keys and the letters beside them, so a game with more than one player still plays the
+way it did when it had one. Players 2, 3 and 4 take what is left over, each with a set of keys no other player
+uses.
 
 On any SDL gamepad: the D-pad (or left stick) moves; **West (X) = Attack**, **South (A) = Jump**, **East (B) = Magic**;
-**Start** = Start, **Back** = Coin. Up to four gamepads, or any mix of gamepad and keyboard.
+**North (Y) = Select**; **Start** = Start, **Back** = Coin. Up to four gamepads, or any mix of gamepad and keyboard.
 
 ## Building from source
 
