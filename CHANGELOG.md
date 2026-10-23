@@ -2,6 +2,28 @@
 
 ## Unreleased
 
+- **Dungeons & Dragons: Shadow over Mystara's four players can now all use the panel's buttons.** The game says it has
+  four players, but only the first one's buttons did anything: the keyboard tables for players 2, 3 and 4 had
+  `SDL_SCANCODE_UNKNOWN` in the slots of their fourth, fifth and sixth buttons, and since `SDL_SCANCODE_UNKNOWN` is 0
+  the frontend dropped those presses without a word (`port/frontend_sdl.cpp`: `if (key != SDL_SCANCODE_UNKNOWN &&
+  keys[key])`). Players 2 and 3 had three buttons and player 4 had two. Worse, player 2's three were **Z X C** — the
+  same keys as player 1's kicks, so on a four-player keyboard the two fought over them. The game's own `game.cfg` said
+  only three buttons, which is why the fourth (Select, the button that changes character and item) had never been bound
+  at all.
+  - **All six of the panel's slots are bound for all four players** (`games/ddsom/game.cfg`: `buttons = Attack | Jump |
+    Magic | Select | Item | Special`). The four the game uses are Attack, Jump, Magic and Select; Item and Special are
+    the two spare slots, named so that the Controllers page has a row for each. A game's own table binds only the
+    buttons it names, so a game that names fewer keeps exactly those.
+  - **Every player after the first now has keys of its own that no other player uses** (`port/bindings.h`, `kKeys2`,
+    `kKeys3`, `kKeys4`): player 2 the number pad's arrows with `I O P` and `K L ;`, player 3 `T G F H` with `V B N`
+    and `M , .`, player 4 the number row's `8 4 6 9` with `Q W E` and `R Y U`. Player 1 keeps the arrows and the letters
+    beside them (`A S D`, `Z X C`), so a game with more than one player still plays the way it did when it had one. The
+    same tables in the toolkit's shared copy had the same defect and are fixed with it (`fight/fight.h`'s bits are
+    unchanged: `kPunch1`..`kKick3`, 1<<4 to 1<<9).
+  - Verified headless: the game's per-frame state hash differs for each of the 24 button/player pairs, each player's
+    presses change the state independently of the others', and a four-player run diverges from a two-player one from
+    the fourth frame on. The shipped `build/ddsom/ddsom.exe` is rebuilt with it.
+
 A tenth game, Super Gem Fighter Mini Mix (*Pocket Fighter* in Japan), with everything the other fighting games have:
 a full training mode, attract mode, the stage and model viewers, survival, endless battle, ring out, widescreen, custom
 colours and the hidden characters. Alien vs. Predator and Cadillacs and Dinosaurs

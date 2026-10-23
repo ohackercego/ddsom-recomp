@@ -89,25 +89,28 @@ inline const BoundTable &MakeBoundTable(int players, const std::string &buttons,
     };
     // (the keyboard of the players after the first, so that a keyboard alone is enough to play with
     // them. The order of a table is up, down, left, right, and the buttons after them.
-    // Player 2: the number row's 3 4 5 6 for the four ways (3 left, 4 down, 5 right, 6 up, as the
-    // number pad is laid out), Z X C for the buttons, 1 for a coin and 2 for start.
-    // Player 3: the number pad's arrows (8 up, 2 down, 4 left, 6 right), O P ; for the buttons,
-    // 7 for a coin and 8 for start.
-    // Player 4: T F G H for the four ways (T up, G down, F left, H right), V B N for the buttons,
-    // 9 for a coin and 0 for start.
-    // The first player keeps the arrows and the letters next to them, so that a game with more than one
-    // player still plays the way it did when it had only one.)
+    // Each player after the first has keys of its own that no other player uses: the first player keeps
+    // the arrows and the letters next to them (A S D and Z X C), so a game with more than one player
+    // still plays the way it did when it had only one, and the others take what is left over.
+    //   Player 2: the number pad's arrows, I O P and K L ; for the six buttons, 2 start, 3 coin.
+    //   Player 3: T G F H for the four ways (T up, G down, F left, H right), V B N M , . for the six
+    //             buttons, the number pad's Enter to start and + for a coin.
+    //   Player 4: the number row's 8 4 6 9 for the four ways, Q W E and R Y U for the six buttons,
+    //             7 start, 0 coin.
+    // (a game with a table of its own gives its first player the return and the left shift, so the
+    // number row is free; the layout above is conflict-free either way, since the first player's own
+    // keys are only the arrows, A S D, Z X C and, at most, 1 and 5.)
     static constexpr SDL_Scancode kKeys2[kBoundActionCount] = {
-        SDL_SCANCODE_6, SDL_SCANCODE_4, SDL_SCANCODE_3, SDL_SCANCODE_5, SDL_SCANCODE_Z, SDL_SCANCODE_X,
-        SDL_SCANCODE_C, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_2, SDL_SCANCODE_1,
+        SDL_SCANCODE_KP_8, SDL_SCANCODE_KP_2, SDL_SCANCODE_KP_4, SDL_SCANCODE_KP_6, SDL_SCANCODE_I, SDL_SCANCODE_O,
+        SDL_SCANCODE_P,    SDL_SCANCODE_K,    SDL_SCANCODE_L,    SDL_SCANCODE_SEMICOLON, SDL_SCANCODE_2, SDL_SCANCODE_3,
     };
     static constexpr SDL_Scancode kKeys3[kBoundActionCount] = {
-        SDL_SCANCODE_KP_8, SDL_SCANCODE_KP_2, SDL_SCANCODE_KP_4, SDL_SCANCODE_KP_6, SDL_SCANCODE_O, SDL_SCANCODE_P,
-        SDL_SCANCODE_SEMICOLON, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_8, SDL_SCANCODE_7,
+        SDL_SCANCODE_T, SDL_SCANCODE_G, SDL_SCANCODE_F, SDL_SCANCODE_H, SDL_SCANCODE_V, SDL_SCANCODE_B,
+        SDL_SCANCODE_N, SDL_SCANCODE_M, SDL_SCANCODE_COMMA, SDL_SCANCODE_PERIOD, SDL_SCANCODE_KP_ENTER, SDL_SCANCODE_KP_PLUS,
     };
     static constexpr SDL_Scancode kKeys4[kBoundActionCount] = {
-        SDL_SCANCODE_T, SDL_SCANCODE_G, SDL_SCANCODE_F, SDL_SCANCODE_H, SDL_SCANCODE_V, SDL_SCANCODE_B,
-        SDL_SCANCODE_N, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_UNKNOWN, SDL_SCANCODE_0, SDL_SCANCODE_9,
+        SDL_SCANCODE_8, SDL_SCANCODE_4, SDL_SCANCODE_6, SDL_SCANCODE_9, SDL_SCANCODE_Q, SDL_SCANCODE_W,
+        SDL_SCANCODE_E, SDL_SCANCODE_R, SDL_SCANCODE_Y, SDL_SCANCODE_U, SDL_SCANCODE_7, SDL_SCANCODE_0,
     };
     static constexpr PadInput kPad[kBoundActionCount] = {
         {SDL_GAMEPAD_BUTTON_DPAD_UP, -1},   {SDL_GAMEPAD_BUTTON_DPAD_DOWN, -1},      {SDL_GAMEPAD_BUTTON_DPAD_LEFT, -1},
@@ -148,9 +151,14 @@ inline const BoundTable &MakeBoundTable(int players, const std::string &buttons,
         const int button = action - kFirstButton;
         const bool isButton = button >= 0 && button < kButtons;
         const bool named = isButton && button < static_cast<int>(names.size()) && !names[button].empty();
+        // (a game with a table of its own binds only the buttons it names: the rest are not its buttons,
+        // and binding them would put keys under a button the game has not got. A game with no names at
+        // all, or the collection's shared table, binds all six)
         if (isButton && !shared && !names.empty() && !named) {
             continue; // (a button the game has not got)
         }
+        // (a game that names some of its buttons but not all six: the ones it has not named keep the
+        // fighting game's title, so that the launcher's Controllers page still shows a row for them)
         const char *title = kBoundActions[action].title;
         if (named) {
             titles.push_back(shared ? std::string(title) + " \u00b7 " + names[button] : names[button]);
