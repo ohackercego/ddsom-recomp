@@ -31,6 +31,15 @@
   - **The controls are documented** (`README.md`, `games/ddsom/README.md`): both still described the old layout,
     which had player 2 on `Z X C` — player 1's own keys — and no Select. They now give the four players' full
     mapping and say which of the panel's six buttons the game uses.
+  - **The build instructions were wrong and the runtime DLLs were missing** (`README.md`, `build/ddsom/`,
+    `build-win/`): the documented CMake line stopped at `Could NOT find ZLIB (missing: ZLIB_LIBRARY
+    ZLIB_INCLUDE_DIR)`, because MSYS2's UCRT64 SDL3 and ZLIB are not on CMake's search path — the
+    `-DSDL3_DIR`, `-DZLIB_INCLUDE_DIR` and `-DZLIB_LIBRARY_RELEASE` flags it needed are now given. The
+    README also listed only `SDL3.dll`, `zlib1.dll` and `libiconv-2.dll` as what to copy next to a fresh
+    build, but a UCRT64 build links libgcc/libstdc++ dynamically and dies at startup with `0xC0000139` and no
+    message without `libgcc_s_seh-1.dll`, `libstdc++-6.dll` and `libwinpthread-1.dll`. All three are now
+    committed to both `build/ddsom/` and `build-win/`. A clean clone, configured and built from the
+    documented command, reproduces the shipped executable's per-frame state hashes exactly.
 
 A tenth game, Super Gem Fighter Mini Mix (*Pocket Fighter* in Japan), with everything the other fighting games have:
 a full training mode, attract mode, the stage and model viewers, survival, endless battle, ring out, widescreen, custom

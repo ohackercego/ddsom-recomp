@@ -30,6 +30,7 @@ ready‑to‑run native executable. Everything lives at the repository root (the
 | `tools/` | Recomp tooling: `recomp.py`, `z80.py`, `audit.sh`, `graft.py`, release packaging. |
 | `work/ddsom/` | **Recompiled native source** for ddsom — thousands of generated `native_*.cpp` / `z80_*.cpp` plus analysis logs. This is the actual native translation of the original program; you almost never need to touch it. |
 | `build/ddsom/ddsom.exe` | The prebuilt native Windows executable (~21 MB, statically linked C++ runtime). `SDL3.dll`, `zlib1.dll` and `libiconv-2.dll` sit next to it so it runs by double‑click. |
+| `build-win/` | The same executable built with MSYS2's UCRT64 toolchain, with the DLLs that build links dynamically (`libgcc_s_seh-1.dll`, `libstdc++-6.dll`, `libwinpthread-1.dll` next to `SDL3.dll` and `zlib1.dll`). |
 | `docs/framework-README.md` | The upstream cps2recomp toolkit README (build instructions, toolkit design). |
 | `Makefile`, `CMakeLists.txt`, `build.mk` | Build system for the toolkit. |
 | `LICENSE` | GPL‑3.0 (this project is GPL‑3.0‑only). |
@@ -99,20 +100,37 @@ CMake, Ninja and the SDL3 dev libraries (SDL3 ≥ 3.4.16, plus ZLIB).
 This repo is **flattened** — `games/` and `work/` live at the repository root, not as
 siblings of it. The toolkit's `CMakeLists.txt` defaults to `GAME=vampire_savior` and to a
 sibling layout, so you must pass the game id and the in‑repo paths explicitly (use
-**native** `C:/...` paths — MSYS `/c/...` paths are not understood by the native cmake):
+**native** `C:/...` paths — MSYS `/c/...` paths are not understood by the native cmake).
+
+With MSYS2's UCRT64 toolchain the two dependencies are not on CMake's search path, so
+point at them directly (adjust the prefix if yours is elsewhere):
 
 ```bash
 # from the repository root, with the UCRT64 toolchain (gcc, cmake, ninja) on PATH
+PREFIX=/ucrt64   # MSYS2's install: C:/msys64/ucrt64
+
 cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
   -DGAME=ddsom \
   -DGAME_DIR="C:/path/to/repo/games/ddsom" \
-  -DWORK_DIR="C:/path/to/repo/work/ddsom"
+  -DWORK_DIR="C:/path/to/repo/work/ddsom" \
+  -DSDL3_DIR="$PREFIX/lib/cmake/SDL3" \
+  -DZLIB_INCLUDE_DIR="$PREFIX/include" \
+  -DZLIB_LIBRARY_RELEASE="$PREFIX/lib/libz.dll.a"
 cmake --build build --target ddsom
 ```
 
-The compiled `ddsom.exe` lands in `build/`. Copy `SDL3.dll`, `zlib1.dll` and `libiconv-2.dll` from your
-toolchain's `bin/` next to it before running. (The shipped `build/ddsom/ddsom.exe` is already statically
-linked against libgcc/libstdc++, so it needs only those three DLLs.)
+Without those three `-D` flags the configure step stops with
+`Could NOT find ZLIB (missing: ZLIB_LIBRARY ZLIB_INCLUDE_DIR)`.
+
+The compiled `ddsom.exe` lands in `build/`. Copy these DLLs from your toolchain's `bin/`
+next to it before running: **`SDL3.dll`**, **`zlib1.dll`**, **`libgcc_s_seh-1.dll`**,
+**`libstdc++-6.dll`** and **`libwinpthread-1.dll`** (plus `libiconv-2.dll` if your build
+uses it). A UCRT64 build links libgcc/libstdc++ dynamically, so it needs them; miss them
+and the game dies at startup with exit code `0xC0000139` and no message.
+
+The shipped `build/ddsom/ddsom.exe` is statically linked against libgcc/libstdc++ and
+needs only `SDL3.dll`, `zlib1.dll` and `libiconv-2.dll`. Both `build/ddsom/` and
+`build-win/` in this repository carry the full set either way.
 
 > **If you edit `games/ddsom/game.cfg`** (the players, the button names), regenerate the header CMake reads
 > before building, or the executable is built against the previous values:
